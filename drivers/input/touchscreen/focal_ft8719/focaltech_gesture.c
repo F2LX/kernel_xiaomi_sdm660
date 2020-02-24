@@ -34,6 +34,10 @@
 * 1.Included header files
 *****************************************************************************/
 #include "focaltech_core.h"
+#ifdef CONFIG_TOUCHSCREEN_COMMON
+#include <linux/input/tp_common.h>
+#endif
+
 #if FTS_GESTURE_EN
 /******************************************************************************
 * Private constant and macro definitions using #define
@@ -214,6 +218,62 @@ static ssize_t fts_gesture_buf_store(struct device *dev, struct device_attribute
     /* place holder for future use */
     return -EPERM;
 }
+
+static int fts_gesture_read(struct seq_file *file, void *v)
+{
+	seq_printf(file, "%d", fts_gesture_data.mode);
+	return 0;
+}
+
+static int fts_gesture_open(struct inode *inode, struct file *file)
+{
+	return single_open(file, fts_gesture_read, inode);
+}
+
+static ssize_t fts_gesture_write(struct file *file, const char __user *buf,
+			 size_t count, loff_t *ppos)
+{
+	uint8_t str;
+	if(copy_from_user(&str, buf, 1)); // ignore
+	fts_gesture_data.mode = (str == '1');
+	return 1;
+}
+
+ static const struct file_operations fts_gesture_fops = {
+	.owner = THIS_MODULE,
+	.open = fts_gesture_open,
+	.write = fts_gesture_write,
+	.release = single_release,
+	.read = seq_read,
+	.llseek = seq_lseek,
+};
+
+#ifdef CONFIG_TOUCHSCREEN_COMMON
+static ssize_t double_tap_show(struct kobject *kobj,
+                              struct kobj_attribute *attr, char *buf)
+{
+       return sprintf(buf, "%d\n", fts_gesture_data.mode);
+}
+
+static ssize_t double_tap_store(struct kobject *kobj,
+                               struct kobj_attribute *attr, const char *buf,
+                               size_t count)
+{
+       int rc, val;
+
+       rc = kstrtoint(buf, 10, &val);
+       if (rc)
+               return -EINVAL;
+
+       fts_gesture_data.mode = !!val;
+       return count;
+}
+
+static struct tp_common_ops double_tap_ops = {
+       .show = double_tap_show,
+       .store = double_tap_store
+};
+#endif
 
 /*****************************************************************************
 *   Name: fts_create_gesture_sysfs
@@ -536,6 +596,9 @@ int fts_gesture_init(struct fts_ts_data *ts_data)
 {
     struct i2c_client *client = ts_data->client;
     struct input_dev *input_dev = ts_data->input_dev;
+#ifdef CONFIG_TOUCHSCREEN_COMMON
+    int ret;
+#endif
 
     FTS_FUNC_ENTER();
     input_set_capability(input_dev, EV_KEY, KEY_WAKEUP);
@@ -570,6 +633,16 @@ int fts_gesture_init(struct fts_ts_data *ts_data)
     __set_bit(KEY_GESTURE_Z, input_dev->keybit);
 
     fts_create_gesture_sysfs(client);
+    proc_create("wake_node", 0666, NULL, &fts_gesture_fops);
+
+#ifdef CONFIG_TOUCHSCREEN_COMMON
+       ret = tp_common_set_double_tap_ops(&double_tap_ops);
+       if (ret < 0) {
+               FTS_ERROR("%s: Failed to create double_tap node err=%d\n",
+                       __func__, ret);
+       }
+#endif
+
     fts_gesture_data.mode = ENABLE;
     fts_gesture_data.active = DISABLE;
 
