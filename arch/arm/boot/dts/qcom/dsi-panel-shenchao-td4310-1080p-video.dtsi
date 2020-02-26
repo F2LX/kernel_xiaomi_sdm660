@@ -1,4 +1,4 @@
-/* Copyright (c) 2017, The Linux Foundation. All rights reserved.
+/*Copyright (c) 2017, The Linux Foundation. All rights reserved.
  * Copyright (C) 2019 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
@@ -186,5 +186,35 @@
 		qcom,mdss-dsi-panel-status-read-length = <1>;
 		qcom,mdss-dsi-panel-status-value = <0x1c>;
 		qcom,mdss-dsi-panel-max-error-count = <3>;
+
+		cm,mdss-livedisplay-cabc-ui-cmd = [
+				15 00 00 00 00 00 02 55 01
+				29 00 00 00 00 00 08 B8 89 51 0d 00 02 00 00
+				29 00 00 00 00 00 1A CE 55 40 4d 6a 75 97 a7 b6 c9 d0 d4 e7 e8 e9 f2 fb ff 04 00 00 04 46 04 69 5a
+				29 01 00 00 00 00 0A F9 64 FF E0 BE 00 8D BF 80 00
+		];
+		cm,mdss-livedisplay-cabc-cmd = [
+				15 01 00 00 00 00 02 55 00
+		];
+
+		qcom,mdss-dsi-pan-enable-dynamic-bitclk;
+		qcom,mdss-dsi-dynamic-bitclk_freq = <798240576 801594528 804948480
+		808302432 811656384>;
+		qcom,mdss-dsi-panel-hdr-enabled;
+		qcom,mdss-dsi-panel-hdr-color-primaries = <14500 15500 32000
+			17000 15500 30000 8000 3000>;
+		qcom,mdss-dsi-panel-peak-brightness = <4200000>;
+		qcom,mdss-dsi-panel-blackness-level = <3230>;
+		qcom,partial-update-enabled = "single_roi";
+		qcom,panel-roi-alignment = <540 270 270 270 1080 270>;
+		qcom,mdss-dsi-te-pin-select = <1>;
+		qcom,mdss-dsi-te-dcs-command = <1>;
+		qcom,mdss-dsi-te-check-enable;
+		qcom,mdss-dsi-te-using-te-pin;
+		qcom,mdss-tear-check-sync-init-val = <2160>;
+		qcom,mdss-tear-check-start-pos = <2160>;
+		qcom,mdss-tear-check-rd-ptr-trigger-intr = <2161>;
+		qcom,panel-ack-disabled;
+
 	};
 };
