@@ -1,0 +1,17 @@
+source build-whyred.sh
+cd ..
+source build-whyred-new.sh
+cd ..
+source build-tulip.sh
+cd ..
+source build-tulip-new.sh
+cd ..
+source build-wayne.sh
+cd ..
+source build-wayne-new.sh
+cd ..
+source build-wayne-miuiq.sh
+cd ..
+source build-lavender.sh
+cd ..
+source build-lavender-new.sh
