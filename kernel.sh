@@ -30,7 +30,7 @@ CROSS_COMPILE_ARM32=arm-linux-gnueabi-
 
 cd $REPACK_DIR
 cp $KERNEL_DIR/out/arch/arm64/boot/Image.gz-dtb $REPACK_DIR/
-FINAL_ZIP="Asylum-Kernel_${VERSION}-${DEVICE_NAME}.zip"
+FINAL_ZIP="Garuda-Kernel_${VERSION}-${DEVICE_NAME}.zip"
 zip -r9 "${FINAL_ZIP}" *
 cp *.zip $OUT
 rm *.zip
@@ -40,5 +40,5 @@ rm AnyKernel3/Image.gz-dtb
 BUILD_END=$(date +"%s")
 DIFF=$(($BUILD_END - $BUILD_START))
 cd out
-rclone copy *.zip drive:asylumnew
+rclone copy *.zip drive:garudanew
 echo -e "Done"
