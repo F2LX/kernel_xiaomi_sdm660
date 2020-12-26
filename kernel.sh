@@ -21,10 +21,10 @@ mkdir -p out
 make O=out clean
 make O=out mrproper
 make O=out ARCH=arm64 ${DEVICE_NAME}_defconfig
-PATH="/users/felix/proton/bin:${PATH}" \
+PATH="/mnt/ssd/workspace/felix/proton/bin:${PATH}" \
 make -j$(nproc --all) O=out \
 ARCH=arm64 \
-CC="ccache /users/felix/proton/bin/clang" \
+CC="ccache /mnt/ssd/workspace/felix/proton/bin/clang" \
 CROSS_COMPILE=aarch64-linux-gnu- \
 CROSS_COMPILE_ARM32=arm-linux-gnueabi-
 
