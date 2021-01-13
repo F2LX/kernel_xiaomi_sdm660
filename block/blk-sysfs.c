@@ -255,7 +255,7 @@ queue_store_##name(struct request_queue *q, const char *page, size_t count) \
 }
 
 QUEUE_SYSFS_BIT_FNS(nonrot, NONROT, 1);
-QUEUE_SYSFS_BIT_FNS(random, ADD_RANDOM, 0);
+QUEUE_SYSFS_BIT_FNS(random, ADD_RANDOM, 1);
 QUEUE_SYSFS_BIT_FNS(iostats, IO_STAT, 1);
 #undef QUEUE_SYSFS_BIT_FNS
 
@@ -463,7 +463,7 @@ static struct queue_sysfs_entry queue_rq_affinity_entry = {
 };
 
 static struct queue_sysfs_entry queue_iostats_entry = {
-	.attr = {.name = "iostats", .mode = S_IRUGO | S_IRUSR },
+	.attr = {.name = "iostats", .mode = S_IRUGO | S_IWUSR },
 	.show = queue_show_iostats,
 	.store = queue_store_iostats,
 };
