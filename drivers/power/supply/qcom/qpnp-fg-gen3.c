@@ -4075,9 +4075,11 @@ static int fg_psy_get_property(struct power_supply *psy,
 	case POWER_SUPPLY_PROP_CC_STEP_SEL:
 		pval->intval = chip->ttf.cc_step.sel;
 		break;
+#if defined(CONFIG_KERNEL_CUSTOM_E7T)
 	case POWER_SUPPLY_PROP_FG_RESET_CLOCK:
 		pval->intval = 0;
 		break;
+#endif
 	default:
 		pr_err("unsupported property %d\n", psp);
 		rc = -EINVAL;
@@ -4141,8 +4143,7 @@ static int fg_bcl_reset(struct fg_chip *chip)
 
 			rc = fg_dma_mem_req(chip, false);
 			if (rc < 0)
-				pr_err("Error in unlocking memory, rc=%d\n",
-						rc);
+				pr_err("Error in unlocking memory, rc=%d\n", rc);
 
 			/* Delay of 2ms */
 			usleep_range(2000, 3000);
@@ -4158,9 +4159,8 @@ static int fg_bcl_reset(struct fg_chip *chip)
 		} else {
 			rc = fg_dma_mem_req(chip, false);
 			if (rc < 0) {
-				pr_err("Error in unlocking memory, rc=%d\n",
-						rc);
-				goto unlock;
+				pr_err("Error in unlocking memory, rc=%d\n", rc);
+				return rc;
 			}
 			success = false;
 			pr_err_ratelimited("PEEK_MUX1 not set retrying...\n");
@@ -4188,6 +4188,7 @@ unlock:
 	else
 		return rc;
 }
+#endif
 static int fg_psy_set_property(struct power_supply *psy,
 				  enum power_supply_property psp,
 				  const union power_supply_propval *pval)
@@ -4239,6 +4240,15 @@ static int fg_psy_set_property(struct power_supply *psy,
 			return -EINVAL;
 		}
 		break;
+#if defined(CONFIG_KERNEL_CUSTOM_E7T)
+	case POWER_SUPPLY_PROP_FG_RESET_CLOCK:
+		rc = fg_bcl_reset(chip);
+		if (rc < 0) {
+			pr_err("Error in resetting BCL clock, rc=%d\n", rc);
+			return rc;
+		}
+		break;
+#endif
 	case POWER_SUPPLY_PROP_CHARGE_FULL:
 		if (chip->cl.active) {
 			pr_warn("Capacity learning active!\n");
@@ -4278,13 +4288,6 @@ static int fg_psy_set_property(struct power_supply *psy,
 		rc = fg_set_jeita_threshold(chip, JEITA_HOT, pval->intval);
 		if (rc < 0) {
 			pr_err("Error in writing jeita_hot, rc=%d\n", rc);
-			return rc;
-		}
-		break;
-	case POWER_SUPPLY_PROP_FG_RESET_CLOCK:
-		rc = fg_bcl_reset(chip);
-		if (rc < 0) {
-			pr_err("Error in resetting BCL clock, rc=%d\n", rc);
 			return rc;
 		}
 		break;
@@ -4389,7 +4392,9 @@ static enum power_supply_property fg_psy_props[] = {
 	POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE,
 	POWER_SUPPLY_PROP_CC_STEP,
 	POWER_SUPPLY_PROP_CC_STEP_SEL,
+#if defined(CONFIG_KERNEL_CUSTOM_E7T)
 	POWER_SUPPLY_PROP_FG_RESET_CLOCK,
+#endif
 };
 
 static const struct power_supply_desc fg_psy_desc = {
