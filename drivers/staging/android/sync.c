@@ -165,9 +165,7 @@ static struct sync_fence *sync_fence_alloc(int size, const char *name)
 		goto err;
 
 	kref_init(&fence->kref);
-#ifdef CONFIG_SYNC_DEBUG
 	strlcpy(fence->name, name, sizeof(fence->name));
-#endif
 
 	init_waitqueue_head(&fence->wq);
 
@@ -686,9 +684,7 @@ static long sync_fence_ioctl_fence_info(struct sync_fence *fence,
 		size = 4096;
 
 	memset(data, 0, size);
-#ifdef CONFIG_SYNC_DEBUG
 	strlcpy(data->name, fence->name, sizeof(data->name));
-#endif
 	data->status = atomic_read(&fence->status);
 	if (data->status >= 0)
 		data->status = !data->status;
