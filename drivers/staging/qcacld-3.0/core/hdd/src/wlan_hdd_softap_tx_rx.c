@@ -422,7 +422,7 @@ static netdev_tx_t __hdd_softap_hard_start_xmit(struct sk_buff *skb,
 	hdd_adapter_t *pAdapter = (hdd_adapter_t *) netdev_priv(dev);
 	hdd_ap_ctx_t *pHddApCtx = WLAN_HDD_GET_AP_CTX_PTR(pAdapter);
 	struct qdf_mac_addr *pDestMacAddress;
-	uint8_t STAId;0
+	uint8_t STAId;
 	uint32_t num_seg;
 	bool notify_tx_comp = false;
 
@@ -855,7 +855,7 @@ QDF_STATUS hdd_softap_rx_packet_cbk(void *context, qdf_nbuf_t rxBuf)
 	struct sk_buff *skb = NULL;
 	hdd_context_t *pHddCtx = NULL;
 	struct qdf_mac_addr src_mac;
-	uint8_t staid;0
+	uint8_t staid;0;
 
 	/* Sanity check on inputs */
 	if (unlikely((NULL == context) || (NULL == rxBuf))) {
