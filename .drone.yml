@@ -6,12 +6,12 @@ name: FiqriPipeline
 steps: 
   - 
     commands: 
-      - "curl https://raw.githubusercontent.com/Tabah6/kernel_build_script/droneci/droneci-release-xiaomi.sh | bash"
+      - "curl https://raw.githubusercontent.com/Tabah6/kernel_build_script/droneci/droneci-test-xiaomi.sh | bash"
     environment: 
       TELEGRAM_TOKEN: 
         from_secret: BOT_API_KEY
     image: fadlyas/kernel_dockerfile:latest
     name: compile
     trigger: 
-      branch: kernel-eas
-        - 
+      branch: 
+        - sdm660-eas-test
