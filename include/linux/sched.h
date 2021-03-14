@@ -1415,6 +1415,8 @@ struct sched_statistics {
 #ifdef CONFIG_SCHED_WALT
 #define RAVG_HIST_SIZE_MAX  5
 
+extern int sched_set_boost(int enable);
+
 /* ravg represents frequency scaled cpu-demand of tasks */
 struct ravg {
 	/*
@@ -1445,6 +1447,11 @@ struct ravg {
 	u32 curr_window, prev_window;
 	u16 active_windows;
 };
+#else
+static inline int sched_set_boost(int enable)
+{
+	return -EINVAL;
+}
 #endif
 
 struct sched_entity {
