@@ -78,7 +78,6 @@
 #include <linux/compiler.h>
 #include <linux/sysctl.h>
 #include <linux/kcov.h>
-#include <linux/devfreq_boost.h>
 #include <linux/cpufreq_times.h>
 
 #include <asm/pgtable.h>
@@ -1777,10 +1776,6 @@ long _do_fork(unsigned long clone_flags,
 	struct task_struct *p;
 	int trace = 0;
 	long nr;
-
-	/* Boost DDR bus to the max for 50 ms when userspace launches an app */
-	if (task_is_zygote(current))
-		devfreq_boost_kick_max(DEVFREQ_MSM_CPUBW, 50);
 
 	/*
 	 * Determine whether and which event to report to ptracer.  When
