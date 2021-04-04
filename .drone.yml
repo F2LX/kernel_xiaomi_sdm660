@@ -1,5 +1,5 @@
 kind: pipeline
-name: Frost Project
+name: deagle
 
 clone:
   depth: 1
@@ -13,4 +13,4 @@ steps:
     chat_id:
       from_secret: chat_id
   commands:
-  - bash build.sh
+  - ./build
