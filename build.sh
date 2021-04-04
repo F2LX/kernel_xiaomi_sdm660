@@ -1,28 +1,22 @@
 #!/bin/bash
 
-export KERNELNAME=Tabah
+export KERNELNAME=Zaky_ma
 
-export LOCALVERSION=ILove-V1.0
+export LOCALVERSION=1
 
-export KBUILD_BUILD_USER=Tabah
+export KBUILD_BUILD_USER=Zaky_Ma
 
-export KBUILD_BUILD_HOST=Sdn2Tunahan
+export KBUILD_BUILD_HOST=.
 
 export TOOLCHAIN=clang
 
-export DEVICES=whyred,tulip,lavender,a26x
-
-export CI_ID=-1001420838318
-
-export GROUP_ID=-1001328102824
+export DEVICES=whyred,tulip,wayne
 
 source helper
 
 gen_toolchain
 
-send_msg "⏳ Start building ${KERNELNAME} ${LOCALVERSION} | DEVICES: whyred - tulip - lavender - wayne - jasmine"
-
-send_pesan "⏳ Start building ${KERNELNAME} ${LOCALVERSION} | DEVICES: whyred - tulip - lavender - wayne - jasmine"
+send_msg "Start building..."
 
 START=$(date +"%s")
 
@@ -33,13 +27,9 @@ do
 	build ${i} -newcam
 done
 
-send_msg "⏳ Start building Overclock version | DEVICES: whyred - tulip"
-
-send_pesan "⏳ Start building Overclock version | DEVICES: whyred - tulip"
+send_msg "Build OC..."
 
 git apply oc.patch
-
-git apply em.patch
 
 for i in ${DEVICES//,/ }
 do
@@ -55,6 +45,4 @@ END=$(date +"%s")
 
 DIFF=$(( END - START ))
 
-send_msg "✅ Build completed in $((DIFF / 60))m $((DIFF % 60))s | Linux version : $(make kernelversion) | Last commit: $(git log --pretty=format:'%s' -5)"
-
-send_pesan "✅ Build completed in $((DIFF / 60))m $((DIFF % 60))s | Linux version : $(make kernelversion) | Last commit: $(git log --pretty=format:'%s' -5)"
+send_msg "Build complete in $((DIFF / 60))m $((DIFF % 60))s"
