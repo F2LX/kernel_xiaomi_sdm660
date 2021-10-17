@@ -577,7 +577,6 @@ afunc_bind(struct usb_configuration *cfg, struct usb_function *fn)
 	set_ep_max_packet_size(uac2_opts, &fs_epout_desc, 1000, false);
 	set_ep_max_packet_size(uac2_opts, &hs_epin_desc, 8000, true);
 	set_ep_max_packet_size(uac2_opts, &hs_epout_desc, 8000, false);
-
 	agdev->out_ep = usb_ep_autoconfig(gadget, &fs_epout_desc);
 	if (!agdev->out_ep) {
 		dev_err(dev, "%s:%d Error!\n", __func__, __LINE__);

@@ -668,6 +668,7 @@ static int mmc_decode_ext_csd(struct mmc_card *card, u8 *ext_csd)
 		card->ext_csd.barrier_support = 0;
 		card->ext_csd.cache_flush_policy = 0;
 	}
+
 	/*
 	 * GENERIC_CMD6_TIME is to be used "unless a specific timeout is defined
 	 * when accessing a specific field", so use it here if there is no
